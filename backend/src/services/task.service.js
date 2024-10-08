@@ -42,3 +42,25 @@ const createTask = async(body) => {
         console.log("Error while creating a Task, ", err);
     }
 }
+
+const updateTask = async(id, body) => {
+    try{
+        const updatedTask = await Task.findByIdAndUpdate(id, body, {
+            new : true,
+        });
+        return updatedTask;
+    }catch(err){
+        console.log("Failed to update the Task, ", err);
+    }
+}
+
+const deleteTask = async(id) => {
+    try{
+        const deletedTask = await Task.findByIdAndDelete(id);
+        return deletedTask;
+    }catch(err){
+        console.log("Failed to delete Task, ", err);
+    }
+}
+
+module.exports = {findTask, createTask, updateTask, deleteTask};

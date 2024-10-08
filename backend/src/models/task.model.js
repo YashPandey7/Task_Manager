@@ -14,11 +14,6 @@ const taskSchema = new mongoose.Schema({
         enum : ["TODO", "DONE"],
         default : "TODO"
     },
-    // Created_On : {
-    //     type : Date,
-    //     required : true,
-    //     default : Date.now
-    // },
     deadline : {
         type : Date,
         required : true
