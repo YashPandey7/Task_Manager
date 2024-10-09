@@ -14,6 +14,10 @@ const taskSchema = new mongoose.Schema({
         enum : ["TODO", "DONE"],
         default : "TODO"
     },
+    linkedFile : {
+        data : Buffer,
+        contentType : String,
+    },
     deadline : {
         type : Date,
         required : true
