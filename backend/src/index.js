@@ -8,7 +8,7 @@ require('dotenv').config();
 // const PORT = 8082;
 // const Mongo_URL = "mongodb://127.0.0.1:27017/task-manager";
 const PORT = process.env.PORT  || 10000;
-const Mongo_URL = process.env.MongoDB_URL;
+const Mongo_URL = process.env.MONGODB_URL;
 
 mongoose.connect(Mongo_URL
     // ,{useNewUrlParser : true,
