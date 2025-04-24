@@ -20,7 +20,7 @@ const createTask = async (req, res) => {
         title,
         description,
         deadline,
-        linkedFile
+        linkedFile 
       });
       console.log(newTask);
       res.status(201).json(newTask);

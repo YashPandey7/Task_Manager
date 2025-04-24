@@ -7,6 +7,9 @@ import { LoadingIndicator } from "./LoadingIndicator";
 import { useTasks, useTaskManager } from "../hooks";
 import { deleteTask, markTaskAsDone } from "../service";
 
+import { useState } from "react";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material"; 
+
 export const TaskManager = () => {
   const { tasks, loading, refreshTasks } = useTasks();
   const {
@@ -21,6 +24,21 @@ export const TaskManager = () => {
     handleFileChange,
     setTaskData,
   } = useTaskManager();
+
+  const [filter, setFilter] = useState("all");
+
+  const handleFilterChange = (event, newFilter) => {
+    if (newFilter !== null) {
+      setFilter(newFilter);
+    }
+  };
+
+
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "completed") return task.status === "DONE";
+    if (filter === "pending") return task.status === "TODO";
+    return true;
+  });
 
   const handleMarkAsDone = async (taskId) => {
     try {
@@ -56,28 +74,41 @@ export const TaskManager = () => {
 
   return (
     <div>
+      <Box display="flex" justifyContent="center" my={2}>
+        <ToggleButtonGroup
+          value={filter}
+          exclusive
+          onChange={handleFilterChange}
+          aria-label="task filter"
+        >
+          <ToggleButton value="all" aria-label="all tasks">
+            All
+          </ToggleButton>
+          <ToggleButton value="completed" aria-label="completed tasks">
+            Completed
+          </ToggleButton>
+          <ToggleButton value="pending" aria-label="pending tasks">
+            Pending
+          </ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
+
       {loading ? (
         <LoadingIndicator />
-      ) : tasks.length ? (
+      ) : filteredTasks.length ? (
         <TaskTable
-          tasks={tasks}
+          tasks={filteredTasks}
           onMarkAsDone={handleMarkAsDone}
           onDownloadFile={handleDownloadFile}
           onEdit={handleEditClick}
           onDelete={handleDelete}
         />
       ) : (
-        <Box
-          display="flex"
-          justifyContent="center"
-          alignItems="center"
-          height="80vh"
-        >
-          <Typography variant="h4" component="h1" gutterBottom>
-            No tasks found!
-          </Typography>
+        <Box display="flex" justifyContent="center" alignItems="center" height="70vh">
+          <Typography variant="h5">No tasks found for selected filter!</Typography>
         </Box>
       )}
+
       <TaskModal
         open={open}
         handleClose={handleClose}
@@ -90,15 +121,12 @@ export const TaskManager = () => {
         file={file}
         isEditing={isEditing}
       />
+
       <Fab
         aria-label="add"
         color="primary"
         onClick={handleAddClick}
-        style={{
-          position: "absolute",
-          bottom: 16,
-          right: 16,
-        }}
+        style={{ position: "absolute", bottom: 16, right: 16 }}
       >
         <AddIcon />
       </Fab>
